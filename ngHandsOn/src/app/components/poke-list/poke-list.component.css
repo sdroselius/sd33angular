@@ -1,0 +1,18 @@
+.pokeImage {
+  float: left;
+  width: 50%;
+}
+.pokeThumb {
+  float: left;
+  width: 50px;
+}
+
+#pokeDetail {
+  width: 50%;
+  border: ridge lightblue 10px;
+  padding: 2px;
+}
+
+.clear {
+  clear: both;
+}

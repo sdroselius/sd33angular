@@ -1,0 +1,25 @@
+<h1>{{title}}</h1>
+<input class="form-control" type="text" name="title" [(ngModel)]="title" />
+
+<button class="btn btn-success" (click)="log('this is an event binding')">Click Me</button>
+
+<div *ngIf="display">
+  <h2>Hello</h2>
+</div>
+
+<form *ngIf="newProduct">
+  <input class="form-control" type="text" name="name" placeholder="Name" [(ngModel)]="newProduct.name"/><br />
+  <input class="form-control" type="text" name="price" placeholder="Price" [(ngModel)]="newProduct.price" /><br />
+  <input class="form-control" type="text" name="imageUrl" placeholder="Image URL" [(ngModel)]="newProduct.imgUrl"/><br />
+  <input class="form-control" type="number" name="rating" placeholder="rating" [(ngModel)]="newProduct.rating" /><br />
+  <input class="form-control" class="btn btn-primary" type="submit" value="Add Item" (click)="onSubmit(newProduct)"/>
+</form>
+
+<h3>Number of Products : {{getNumberOfProducts()}}</h3>
+
+  <div *ngFor="let prod of products">
+    <h3>{{prod.name}}</h3>
+    <p>{{prod.price}}</p>
+    <p>{{prod.rating}}</p>
+    <img [src]="prod.imgUrl" alt="Image for {{prod.name}}">
+  </div>

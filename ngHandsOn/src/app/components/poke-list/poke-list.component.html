@@ -1,0 +1,227 @@
+<a href="https://www.google.com/">LMGTFY</a> <br>
+<a href="index.html">home</a>
+
+
+<table class="table table-striped table-hover" *ngIf="!selected">
+  <thead>
+    <tr>
+      <td>id</td>
+      <td>name</td>
+      <td>image</td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let poke of pokemons" (click)="selected = poke">
+      <td>{{ poke.pokeId }}</td>
+      <td>{{ poke.name }}</td>
+      <td>
+        <img [src]="poke.img" />
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div id="pokeDetail" *ngIf="selected && !editPokemon">
+  <img [src]="selected.img" alt="{{ selected.name }}" class="pokeImage" />
+  <h3>{{ selected.name | uppercase }}</h3>
+  <ul>
+    <li *ngFor="let type of selected.types">{{ type.name }}</li>
+  </ul>
+  <p>Ht {{ selected.height | number: ".1-2" }}</p>
+  <p>Wt {{ selected.weight | number: ".1-2" }}</p>
+  <div class="clear"></div>
+  <p>No. {{ selected.pokeId }}</p>
+  <hr />
+  <p>{{ selected.description }}</p>
+  <button
+    *ngIf="selected.pokeId < 1 || selected.pokeId > 151"
+    class="btn btn-danger"
+    (click)="deletePokemon(selected.pokeId)"
+  >
+    Delete
+  </button>
+  <button class="btn btn-primary" (click)="setEditPokemon(selected)">
+    Update Pokemon
+  </button>
+  <button class="btn btn-success" (click)="selected = null">
+    Back to Pokemon List
+  </button>
+</div>
+
+<div id="addPokemonDiv" *ngIf="!selected">
+
+  <h3>Add a new Pokemon!</h3>
+  <hr>
+  <div id="newPokemon">
+    <form name="newPokemonForm" #pokeForm="ngForm" class="form">
+      <input
+        type="number"
+        name="pokeId"
+        placeholder="Pokemon #"
+        required
+        min="1"
+        class="form-control"
+        ngModel
+        #pokeId="ngModel"
+      />
+      <input
+        type="text"
+        name="name"
+        placeholder="Name"
+        required
+        minlength="2"
+        class="form-control"
+        ngModel
+        #pokeName="ngModel"
+      />
+      <input
+        type="number"
+        step="0.1"
+        name="height"
+        placeholder="Height"
+        min=".1"
+        required
+        class="form-control"
+        ngModel
+      />
+      <input
+        type="number"
+        step="0.1"
+        name="weight"
+        placeholder="Weight"
+        min=".1"
+        required
+        class="form-control"
+        ngModel
+      />
+      <input
+        type="number"
+        step="1"
+        name="exp"
+        placeholder="Exp"
+        class="form-control"
+        ngModel
+      />
+      <input
+        type="text"
+        name="img"
+        placeholder="Image URL"
+        class="form-control"
+        ngModel
+      />
+      <input
+        type="text"
+        name="description"
+        placeholder="Description"
+        class="form-control"
+        ngModel
+      />
+      <button (click)="addPokemon(pokeForm)" class="btn btn-primary">
+        Add Pokemon
+      </button>
+    </form>
+    <div
+      *ngIf="pokeName.invalid && (pokeName.dirty || pokeName.touched)"
+      class="alert alert-danger"
+    >
+      <div *ngIf="pokeName.errors && pokeName.errors['required']">
+        Name is required.
+      </div>
+      <div *ngIf="pokeName.errors && pokeName.errors['minlength']">
+        Name must be at least 2 characters long.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="updatePokemon" *ngIf="editPokemon">
+  <form name="editPokemonForm">
+    <div class="row mb-3">
+      <label class="col-sm-2 col-form-label" for="pokeId">Pokemon#</label>
+      <div class="col-sm-10">
+        <input
+          class="form-control"
+          type="number"
+          name="pokeId"
+          placeholder="Pokemon #"
+          required
+          min="1"
+          [(ngModel)]="editPokemon.pokeId"
+        />
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label class="col-sm-2 col-form-label" for="name">Name</label>
+      <div class="col-sm-10">
+        <input
+          class="form-control"
+          type="text"
+          name="name"
+          placeholder="Name"
+          required
+          minlength="2"
+          [(ngModel)]="editPokemon.name"
+        />
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label class="col-sm-2 col-form-label" for="height">Height</label>
+      <div class="col-sm-10">
+        <input
+          class="form-control"
+          type="number"
+          step="0.1"
+          name="height"
+          placeholder="Height"
+          min=".1"
+          [(ngModel)]="editPokemon.height"
+        />
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label class="col-sm-2 col-form-label" for="weight">Weight</label>
+      <div class="col-sm-10">
+        <input
+          class="form-control"
+          type="number"
+          step="0.1"
+          name="weight"
+          placeholder="Weight"
+          min=".1"
+          required
+          [(ngModel)]="editPokemon.weight"
+        />
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label class="col-sm-2 col-form-label" for="img">Image URL</label>
+      <div class="col-sm-10">
+        <input
+          class="form-control"
+          type="text"
+          name="img"
+          placeholder="Image URL"
+          [(ngModel)]="editPokemon.img"
+        />
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label class="col-sm-2 col-form-label" for="description"
+        >Description</label
+      >
+      <div class="col-sm-10">
+        <input
+          class="form-control"
+          type="text"
+          name="description"
+          placeholder="Description"
+          [(ngModel)]="editPokemon.description"
+        />
+      </div>
+    </div>
+    <button class="btn btn-primary" (click)="updatePokemon(editPokemon)">
+      Update Pokemon
+    </button>
+    <button class="btn btn-success" (click)="editPokemon = null">Cancel</button>
+  </form>
+</div>

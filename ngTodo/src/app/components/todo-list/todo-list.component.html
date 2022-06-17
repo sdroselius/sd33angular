@@ -1,0 +1,98 @@
+<h1>
+  {{ title }} <span class="badge bg-primary">{{ getTodoCount() }}</span>
+</h1>
+
+<div id="todoList" *ngIf="!selected">
+  <table class="table table-striped table-hover">
+    <thead class="table-dark">
+      <tr>
+        <th>Task</th>
+        <th>Mark</th>
+        <th>Completed</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let todo of todos">
+        <td (click)="displayTodo(todo)">{{ todo.task }}</td>
+        <td>
+          <input
+            type="checkbox"
+            name="completed"
+            [(ngModel)]="todo.completed"
+            class="form-check"
+            (change)="updateTodo(todo, false)"
+          />
+        </td>
+        <td>{{ todo.completed }}</td>
+        <td>
+          <button class="btn btn-danger" (click)="deleteTodo(todo.id)">
+            X
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <form name="newTask" *ngIf="newTodo" class="form">
+    <div class="row">
+      <div class="col-sm-9">
+        <input
+        class="form-control"
+        type="text"
+        name="task"
+        [(ngModel)]="newTodo.task"
+        />
+      </div>
+      <div class="col-sm-3">
+        <button class="btn btn-primary" (click)="addTodo(newTodo)">
+          Add Todo
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div id="todoDetails" *ngIf="selected && !editTodo">
+  <h4>{{ selected.id }}</h4>
+  <h3>{{ selected.task }}</h3>
+  <p>{{ selected.description }}</p>
+  <!-- <p>Completed: {{ selected.completed }}</p> -->
+  <p>{{ selected.completed ? 'Complete' : 'Incomplete'}}</p>
+  <!-- <p>Completed: <input type="checkbox" readonly [ngModel]="selected.completed"></p> -->
+  <button class="btn btn-outline-danger" (click)="displayTable()">Back</button>
+  <button class="btn btn-outline-primary" (click)="setEditTodo()">Edit</button>
+</div>
+
+<div id="todoEdit" *ngIf="editTodo">
+  <h4>Todo # {{editTodo.id}}</h4>
+  <form>
+    <label class="form-label" for="task">Task</label>
+    <input
+      class="form-control"
+      type="text"
+      name="task"
+      [(ngModel)]="editTodo.task"
+    />
+    <br />
+    <label class="form-label" for="description">Description</label>
+    <textarea rows="3"
+      class="form-control"
+      type="text"
+      name="description"
+      [(ngModel)]="editTodo.description"
+    ></textarea>
+    <br />
+    <div class="form-check">
+      <label class="form-check-label" for="completed">Completed</label>
+      <input
+      class="form-check-input"
+      type="checkbox"
+      name="completed"
+      [(ngModel)]="editTodo.completed"
+      />
+    </div>
+      <br />
+    <button class="btn btn-danger" (click)="editTodo = null">Cancel</button>
+    <button class="btn btn-primary" (click)="updateTodo(editTodo)">Save</button>
+  </form>
+</div>
